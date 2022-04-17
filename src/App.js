@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import "./App.css";
 import Navbar from "./components/layout/Navbar";
 import Users from "./components/users/Users";
+import Search from "./components/users/Search";
 import axios from "axios";
 
 const clientId = `?client_id=${process.env.REACT_APP_GITHUB_CLIENT_ID}`;
@@ -24,6 +25,7 @@ class App extends Component {
       <div className="App">
         <Navbar />
         <div className="container">
+          <Search />
           <Users loading={this.state.loading} users={this.state.users} />
         </div>
       </div>
