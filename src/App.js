@@ -4,6 +4,7 @@ import Navbar from './components/layout/Navbar';
 import Users from './components/users/Users';
 import Search from './components/users/Search';
 import axios from 'axios';
+import { Alert } from './components/layout/Alert';
 
 const baseUrl = `https://api.github.com/`;
 const clientId = `client_id=${process.env.REACT_APP_GITHUB_CLIENT_ID}`;
@@ -15,6 +16,7 @@ class App extends Component {
   state = {
     users: [],
     loading: false,
+    alert: null,
   };
 
   //Search Github users
@@ -32,16 +34,25 @@ class App extends Component {
     this.setState({ users: [], loading: false });
   };
 
+  // Set alert state
+  setAlert = (msg, type) => {
+    this.setState({ alert: { msg, type } });
+
+    setTimeout(() => this.setState({ alert: null }), 5000);
+  };
+
   render() {
-    const { users, loading } = this.state;
+    const { users, loading, alert } = this.state;
 
     return (
       <div className="App">
         <Navbar />
         <div className="container">
+          <Alert alert={alert} />
           <Search
             searchUsers={this.searchUsers}
             clearUsers={this.clearUsers}
+            setAlert={this.setAlert}
             showClear={users.length > 0}
           />
           <Users loading={loading} users={users} />
