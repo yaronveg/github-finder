@@ -1,12 +1,12 @@
 import axios from 'axios';
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import './App.css';
 import { Alert } from './components/layout/Alert';
 import Navbar from './components/layout/Navbar';
 import Search from './components/users/Search';
 import Users from './components/users/Users';
-import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
-// import { Switch } from 'react-router';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import About from './components/pages/About';
 
 const baseUrl = `https://api.github.com/`;
 const clientId = `client_id=${process.env.REACT_APP_GITHUB_CLIENT_ID}`;
@@ -51,12 +51,11 @@ class App extends Component {
           <Navbar />
           <div className="container">
             <Alert alert={alert} />
-            <Switch>
+            <Routes>
               <Route
-                exact
                 path="/"
-                render={(props) => (
-                  <Fragment>
+                element={
+                  <>
                     <Search
                       searchUsers={this.searchUsers}
                       clearUsers={this.clearUsers}
@@ -64,10 +63,11 @@ class App extends Component {
                       showClear={users.length > 0}
                     />
                     <Users loading={loading} users={users} />
-                  </Fragment>
-                )}
+                  </>
+                }
               />
-            </Switch>
+              <Route path="/about" element={<About />} />
+            </Routes>
           </div>
         </div>
       </Router>
