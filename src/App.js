@@ -13,13 +13,15 @@ const baseUrl = `https://api.github.com/`;
 const clientId = `client_id=${process.env.REACT_APP_GITHUB_CLIENT_ID}`;
 const clientSecret = `client_secret=${process.env.REACT_APP_GITHUB_CLIENT_SECRET}`;
 const usersBaseUrl = `${baseUrl}search/users`;
+const queryOptions = `pre_page=5&sort=created:asc`;
 
 class App extends Component {
   state = {
     users: [],
+    user: {},
+    userRepos: [],
     loading: false,
     alert: null,
-    user: {},
   };
 
   //Search Github users
@@ -28,7 +30,6 @@ class App extends Component {
     const res = await axios.get(
       `${usersBaseUrl}?q=${text}&${clientId}&${clientSecret}`
     );
-    this.setState({ loading: false });
     this.setState({ users: res.data.items, loading: false });
   };
 
@@ -38,8 +39,16 @@ class App extends Component {
     const res = await axios.get(
       `${usersBaseUrl}/${username}?${clientId}&${clientSecret}`
     );
-    this.setState({ loading: false });
     this.setState({ user: res.data, loading: false });
+  };
+
+  // Get user repos
+  getUserRepos = async (username) => {
+    this.setState({ loading: true });
+    const res = await axios.get(
+      `${usersBaseUrl}/${username}repos?${queryOptions}&${clientId}&${clientSecret}`
+    );
+    this.setState({ userRepos: res.data, loading: false });
   };
 
   //Clear users from state
@@ -55,7 +64,7 @@ class App extends Component {
   };
 
   render() {
-    const { users, user, loading, alert } = this.state;
+    const { users, user, userRepos, loading, alert } = this.state;
 
     return (
       <Router>
@@ -82,7 +91,13 @@ class App extends Component {
               <Route
                 path="/user/:login"
                 element={
-                  <User getUser={this.getUser} user={user} loading={loading} />
+                  <User
+                    getUser={this.getUser}
+                    getUserRepos={this.getUserRepos}
+                    user={user}
+                    userRepos={userRepos}
+                    loading={loading}
+                  />
                 }
               />
             </Routes>
