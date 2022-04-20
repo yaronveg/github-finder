@@ -1,12 +1,14 @@
-import React, { useEffect } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { Spinner } from '../layout/Spinner';
-import PropTypes from 'prop-types';
 import { Link, useParams } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheck, faTimesCircle } from '@fortawesome/free-solid-svg-icons';
+import GithubContext from '../../context/github/githubContext';
 import Repos from '../repos/Repos';
 
-const User = ({ user, loading, userRepos, getUser, getUserRepos }) => {
+const User = () => {
+  const githubContext = useContext(GithubContext);
+  const { user, loading, getUser, getUserRepos } = githubContext;
   const params = useParams();
   const {
     name,
@@ -97,18 +99,10 @@ const User = ({ user, loading, userRepos, getUser, getUserRepos }) => {
           <div className="badge badge-light">Public Repos: {public_repos}</div>
           <div className="badge badge-dark">Public Gists: {public_gists}</div>
         </div>
-        <Repos repos={userRepos} />
+        <Repos />
       </>
     )
   );
-};
-
-User.propTypes = {
-  loading: PropTypes.bool,
-  user: PropTypes.object.isRequired,
-  userRepos: PropTypes.array.isRequired,
-  getUser: PropTypes.func.isRequired,
-  getUserRepos: PropTypes.func.isRequired,
 };
 
 export default User;
