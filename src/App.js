@@ -9,10 +9,11 @@ import User from './components/users/User';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import About from './components/pages/About';
 
-const baseUrl = `https://api.github.com/`;
+const baseUrl = `https://api.github.com`;
 const clientId = `client_id=${process.env.REACT_APP_GITHUB_CLIENT_ID}`;
 const clientSecret = `client_secret=${process.env.REACT_APP_GITHUB_CLIENT_SECRET}`;
-const usersBaseUrl = `${baseUrl}search/users`;
+const usersSearchBaseUrl = `${baseUrl}/search/users`;
+const usersBaseUrl = `${baseUrl}/users`;
 const queryOptions = `pre_page=5&sort=created:asc`;
 
 class App extends Component {
@@ -28,7 +29,7 @@ class App extends Component {
   searchUsers = async (text) => {
     this.setState({ loading: true });
     const res = await axios.get(
-      `${usersBaseUrl}?q=${text}&${clientId}&${clientSecret}`
+      `${usersSearchBaseUrl}?q=${text}&${clientId}&${clientSecret}`
     );
     this.setState({ users: res.data.items, loading: false });
   };
@@ -46,7 +47,7 @@ class App extends Component {
   getUserRepos = async (username) => {
     this.setState({ loading: true });
     const res = await axios.get(
-      `${usersBaseUrl}/${username}repos?${queryOptions}&${clientId}&${clientSecret}`
+      `${usersBaseUrl}/${username}/repos?${queryOptions}&${clientId}&${clientSecret}`
     );
     this.setState({ userRepos: res.data, loading: false });
   };
